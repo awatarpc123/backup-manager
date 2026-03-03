@@ -570,6 +570,7 @@ def run_gui():
             self.cfg = BackupEngine.load_config()
             self.worker = None
             self.rclone_info = BackupEngine.detect_rclone()
+            self.tray = None
 
             tabs = QTabWidget()
             self.setCentralWidget(tabs)
