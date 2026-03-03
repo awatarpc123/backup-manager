@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Backup Manager
+GenericName=Backup Tool
+Comment=Incremental backup manager with rsync and tar+zstd
+Exec=/usr/local/bin/backup-manager
+Icon=folder-sync
+Terminal=false
+Categories=System;Utility;Archiving;
+Keywords=backup;restore;rsync;archive;sync;
+StartupNotify=true
