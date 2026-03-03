@@ -2,10 +2,10 @@
 Type=Application
 Name=Backup Manager
 GenericName=Backup Tool
-Comment=Incremental backup manager with rsync and tar+zstd
+Comment=Backup manager with rsync, tar+zstd, and Google Drive support
 Exec=/usr/local/bin/backup-manager
 Icon=folder-sync
 Terminal=false
 Categories=System;Utility;Archiving;
-Keywords=backup;restore;rsync;archive;sync;
+Keywords=backup;restore;rsync;archive;sync;gdrive;rclone;
 StartupNotify=true

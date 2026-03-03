@@ -16,7 +16,7 @@ done
 systemctl --user daemon-reload 2>/dev/null || true
 
 sudo rm -fv /usr/local/bin/backup-manager
-sudo rm -fv /usr/local/bin/backup-manager-backend
+sudo rm -fv /usr/local/bin/backup-manager-backend 2>/dev/null || true
 rm -fv "$HOME/.local/share/applications/backup-manager.desktop"
 
 echo ""

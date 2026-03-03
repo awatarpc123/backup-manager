@@ -1,22 +1,18 @@
-# Backup Manager
+# Backup Manager v2.0
 
-Incremental backup tool with PyQt6 GUI for Arch Linux + KDE Plasma.
-
-Uses **rsync** for incremental backups and **tar+zstd** for compressed archives. Scheduled via **systemd user timers**.
+Backup tool with PyQt6 GUI for Arch Linux + KDE Plasma.
+Rsync incremental backups, tar+zstd archives, Google Drive upload via rclone.
 
 ## Features
 
-| Feature | Description |
-|---|---|
-| **Rsync incremental** | Fast, deduplicating backups with hardlinks |
-| **tar+zstd archives** | Compressed single-file backups |
-| **Multiple profiles** | Different backup configs for different data |
-| **Scheduling** | systemd user timers (hourly/daily/weekly/monthly) |
-| **History** | Full backup log with status, size, duration |
-| **Restore** | GUI-guided restore from any backup |
-| **Exclude patterns** | Skip caches, trash, node_modules, etc. |
-| **System tray** | Quick backup from tray menu |
-| **CLI** | Full control from command line |
+- **Rsync incremental** — fast backups with hardlinks
+- **tar+zstd archives** — compressed single-file backups
+- **Google Drive** — upload backups via rclone
+- **Auto schedule** — systemd user timers (hourly/daily/weekly/monthly)
+- **3-tab GUI** — Backup, History, Settings
+- **System tray** — quick backup from tray
+- **CLI** — full control from command line
+- **Single file** — no bash backend, pure Python
 
 ## Installation
 
@@ -27,6 +23,20 @@ chmod +x install.sh
 ./install.sh
 ```
 
+## Google Drive Setup
+
+After installation, set up Google Drive (one-time):
+
+```bash
+rclone config
+```
+
+1. Choose `n` (new remote)
+2. Name it `gdrive`
+3. Choose `Google Drive`
+4. Follow the browser OAuth flow
+5. Done — enable Google Drive in the Backup tab
+
 ## Usage
 
 ### GUI
@@ -36,62 +46,26 @@ backup-manager
 
 ### CLI
 ```bash
-# Show status
-backup-manager status
-
-# Run backup
-backup-manager backup home
-
-# Schedule daily backups
-backup-manager schedule home --interval daily
-
-# Remove schedule
-backup-manager schedule home --remove
-
-# Restore
-backup-manager restore --source /mnt/backup/home_latest --dest ~/restored
-```
-
-## Configuration
-
-Config stored in `~/.config/backup-manager/config.json`.
-
-Edit via GUI (Configure tab) or manually:
-
-```json
-{
-  "profiles": {
-    "home": {
-      "name": "Home Directory",
-      "sources": ["~/"],
-      "destination": "/mnt/backup",
-      "type": "rsync",
-      "exclude": [".cache/", "node_modules/", ".local/share/Trash/"],
-      "keep_versions": 5,
-      "schedule": "daily"
-    }
-  }
-}
+backup-manager status                          # show status
+backup-manager backup home                     # run backup
+backup-manager restore /path/to/backup --dest ~/restored
+backup-manager schedule home --interval daily  # auto schedule
+backup-manager schedule home --remove          # remove schedule
 ```
 
 ## Architecture
 
 ```
-backup-manager (PyQt6 GUI / CLI)
-       │
-       ▼ calls
-backup-manager-backend (bash)
-       │
-       ├─ rsync --archive --delete --link-dest
-       ├─ tar --zstd
-       └─ systemd user timers
-       │
-       ▼ stores
-~/.config/backup-manager/
-  ├── config.json      (profiles & settings)
-  ├── history.json     (backup log)
-  └── logs/            (detailed rsync/tar output)
+backup-manager.py (single file)
+  ├── BackupEngine class
+  │   ├── rsync / tar+zstd (subprocess)
+  │   ├── rclone (Google Drive upload)
+  │   └── systemd user timers
+  ├── PyQt6 GUI (3 tabs)
+  └── CLI
 ```
+
+Config: `~/.config/backup-manager/config.json`
 
 ## Uninstall
 
